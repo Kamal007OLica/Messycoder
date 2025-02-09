@@ -1,0 +1,78 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+
+#define ALPHABET_SIZE 26
+
+// Trie Node structure
+typedef struct TrieNode {
+    struct TrieNode *children[ALPHABET_SIZE];
+    bool isEndOfWord;
+} TrieNode;
+
+// Function to create a new Trie node
+TrieNode *createNode() {
+    TrieNode *node = (TrieNode *)malloc(sizeof(TrieNode));
+    if (node) {
+        node->isEndOfWord = false;
+        for (int i = 0; i < ALPHABET_SIZE; i++)
+            node->children[i] = NULL;
+    }
+    return node;
+}
+
+// Function to insert a word into the Trie
+void insert(TrieNode *root, const char *word) {
+    TrieNode *crawler = root;
+    while (*word) {
+        int index = *word - 'a';
+        if (!crawler->children[index])
+            crawler->children[index] = createNode();
+        crawler = crawler->children[index];
+        word++;
+    }
+    crawler->isEndOfWord = true;
+}
+
+// Function to search for a word in the Trie
+bool search(TrieNode *root, const char *word) {
+    TrieNode *crawler = root;
+    while (*word) {
+        int index = *word - 'a';
+        if (!crawler->children[index])
+            return false;
+        crawler = crawler->children[index];
+        word++;
+    }
+    return crawler->isEndOfWord;
+}
+
+// Function to free Trie memory
+void freeTrie(TrieNode *root) {
+    if (!root) return;
+    for (int i = 0; i < ALPHABET_SIZE; i++) {
+        if (root->children[i])
+            freeTrie(root->children[i]);
+    }
+    free(root);
+}
+
+int main() {
+    TrieNode *root = createNode();
+
+    // Insert words
+    insert(root, "hello");
+    insert(root, "world");
+    insert(root, "hi");
+    insert(root, "trie");
+
+    // Search words
+    printf("Search hello: %s\n", search(root, "hello") ? "Found" : "Not Found");
+    printf("Search world: %s\n", search(root, "world") ? "Found" : "Not Found");
+    printf("Search tree: %s\n", search(root, "tree") ? "Found" : "Not Found");
+    printf("Search trie: %s\n", search(root, "trie") ? "Found" : "Not Found");
+
+    // Free memory
+    freeTrie(root);
+    return 0;
+}
