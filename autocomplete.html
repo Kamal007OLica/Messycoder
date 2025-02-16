@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Autocomplete Search</title>
+    <style>
+        /* Styling for the input and suggestion box */
+        #search-box {
+            width: 300px;
+            padding: 10px;
+            font-size: 16px;
+            margin: 10px 0;
+        }
+
+        #suggestions {
+            border: 1px solid #ccc;
+            max-height: 150px;
+            overflow-y: auto;
+            width: 300px;
+            position: absolute;
+            background-color: white;
+            z-index: 1;
+        }
+
+        .suggestion-item {
+            padding: 8px;
+            cursor: pointer;
+        }
+
+        .suggestion-item:hover {
+            background-color: #f0f0f0;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Autocomplete Search</h2>
+    <input type="text" id="search-box" onkeyup="autocomplete()" placeholder="Search for a word...">
+    <div id="suggestions"></div>
+
+    <script>
+        // List of words to be used in autocomplete
+        const words = ["apple", "banana", "blueberry", "cherry", "grape", "kiwi", "lemon", "mango", "orange", "pear", "pineapple", "strawberry", "watermelon"];
+
+        function autocomplete() {
+            const input = document.getElementById("search-box").value;
+            const suggestions = document.getElementById("suggestions");
+
+            // Clear previous suggestions
+            suggestions.innerHTML = '';
+
+            if (input.length === 0) {
+                return;
+            }
+
+            // Find words that start with the input string
+            const filteredWords = words.filter(word => word.toLowerCase().startsWith(input.toLowerCase()));
+
+            // Display matching suggestions
+            filteredWords.forEach(word => {
+                const div = document.createElement("div");
+                div.classList.add("suggestion-item");
+                div.innerText = word;
+                div.onclick = function () {
+                    document.getElementById("search-box").value = word;
+                    suggestions.innerHTML = ''; // Hide suggestions after selection
+                };
+                suggestions.appendChild(div);
+            });
+        }
+    </script>
+
+</body>
+</html>
