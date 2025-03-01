@@ -1,16 +1,28 @@
-<!DOCTYPE html>
+<h1> Guess the number </h1>
+<input id="guessnumber" type="number">
+<button onclick="check()"> Check </button>
+<p id="result"> You are right/Wrong</p>
+<p id="score"> Score: 10 </p>
 
-<html lang="en"
+<script>
+    // Selecting input box and paragraph
+    var guessnumber = document.getElementById("guessnumber");
+    var result = document.getElementById("result");
+    var score = document.getElementById("score");
+    var randomnumber = Math.floor(Math.random() * 10) + 1;
+    var totalscore = 10;
 
-        <head>
-            <title>Vanakkam</title>
-        </head>
-
-        <body>
-            <form action="/greet">  
-                <input autocomplete="off" autofocus name="name" placeholder="Name" type="text" >
-                <button type="submit">greet</button>
-            </form>
-        </body>
-
-</html>
+    function check() {
+        var enterednumber = Number(guessnumber.value); // Convert input to number
+        
+        if (enterednumber === randomnumber) {
+            console.log("Right");
+            result.textContent = "You are right!";
+            alert("YOU WON");
+        } else {
+            totalscore -= 1; // Decrement score
+            score.textContent = "Score: " + totalscore;
+            result.textContent = "You are wrong!";
+        }
+    }
+</script>
